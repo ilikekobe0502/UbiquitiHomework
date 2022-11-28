@@ -1,6 +1,9 @@
 package com.example.ubiquitihomework.di
 
 import android.content.Context
+import com.example.ubiquitihomework.model.repository.ApiRepository
+import com.example.ubiquitihomework.network.ApiModule
+import com.example.ubiquitihomework.network.AuthInterceptor
 import com.example.ubiquitihomework.ui.preview.PreviewViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,6 +17,7 @@ class KoinModules {
                 androidContext(app)
                 modules(
                     listOf(
+                        networkModule,
                         viewModelModule
                     )
                 )
@@ -22,6 +26,14 @@ class KoinModules {
     }
 }
 
+val networkModule = module {
+    single { AuthInterceptor() }
+    single { ApiModule.provideOkHttpClient(get()) }
+    single { ApiModule.provideRetrofit(get()) }
+    single { ApiModule.provideAirStatusApi(get()) }
+    factory { ApiRepository(get()) }
+}
+
 val viewModelModule = module {
-    viewModel { PreviewViewModel() }
+    viewModel { PreviewViewModel(get()) }
 }

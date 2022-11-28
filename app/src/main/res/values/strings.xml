@@ -7,4 +7,6 @@
     <!--  Preview Page  -->
     <string name="preview_page_title">空氣污染</string>
     <string name="preview_page_status_great_hint">The status is good, we want to go out to have fun</string>
+    <string name="preview_page_status_bad_toast_message">%s is bad, don\'t go outside.</string>
+    <string name="preview_page_empty">找不到資料</string>
 </resources>
