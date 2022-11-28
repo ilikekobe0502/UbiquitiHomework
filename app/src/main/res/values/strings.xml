@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">UbiquitiHomework</string>
+
+    <string name="menu_search">Search</string>
+    <string name="menu_search_hint">請輸入『站名』</string>
+
+    <!--  Preview Page  -->
+    <string name="preview_page_title">空氣污染</string>
+    <string name="preview_page_status_great_hint">The status is good, we want to go out to have fun</string>
 </resources>
