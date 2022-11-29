@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
-import timber.log.Timber
 
 
 class ApiRepository(private val apiService: ApiService) {
@@ -16,10 +15,8 @@ class ApiRepository(private val apiService: ApiService) {
         queryMap["limit"] = "1000"
         queryMap["sort"] = "ImportDate desc"
         queryMap["format"] = "json"
-        Timber.d("${Thread.currentThread()} getAirStatus")
         return flowOf(apiService.getAirStatus(queryMap))
             .map { result ->
-                Timber.d("${Thread.currentThread()} map")
                 if (!result.isSuccessful) throw HttpException(result)
                 return@map result.body()
             }

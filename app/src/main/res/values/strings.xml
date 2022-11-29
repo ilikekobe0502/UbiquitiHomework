@@ -9,4 +9,6 @@
     <string name="preview_page_status_great_hint">The status is good, we want to go out to have fun</string>
     <string name="preview_page_status_bad_toast_message">%s is bad, don\'t go outside.</string>
     <string name="preview_page_empty">找不到資料</string>
+    <string name="preview_page_search_message">請輸入『站名』\n查詢該地區空污資訊</string>
+    <string name="preview_page_search_empty_message">找不到『%s』\n相關的空汙資訊</string>
 </resources>

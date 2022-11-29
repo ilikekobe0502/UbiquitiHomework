@@ -1,9 +1,10 @@
 package com.example.ubiquitihomework.ui.preview
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -11,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.example.ubiquitihomework.MainActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ubiquitihomework.R
 import com.example.ubiquitihomework.databinding.FragmentPreviewBinding
 import com.example.ubiquitihomework.listener.AdapterInteractionListener
 import com.example.ubiquitihomework.model.api.ApiResult
+import com.example.ubiquitihomework.ui.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -24,7 +25,6 @@ import org.koin.android.ext.android.inject
 
 class PreviewFragment : Fragment() {
     companion object {
-        fun newInstance() = PreviewFragment()
         const val PM25_LIMIT: Int = 20
     }
 
@@ -44,6 +44,49 @@ class PreviewFragment : Fragment() {
         }
     private val verticalAdapter = VerticalRecyclerViewAdapter(verticalAdapterInteractionListener)
     private val horizontalAdapter = HorizontalRecyclerViewAdapter()
+    private val expandListener = object : MenuItem.OnActionExpandListener {
+        override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+            binding.rvTopContent.isVisible = true
+            val originalList = (viewModel.airStatusResult.value as ApiResult.Success).result
+            originalList?.let { verticalAdapter.setData(it) }
+            showEmptyView(false)
+            return true
+        }
+
+        override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+            binding.rvTopContent.isVisible = false
+            viewModel.getSearchAirStatus("")
+            return true
+        }
+    }
+    private lateinit var searchView: SearchView
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            searchView = menu.findItem(R.id.search).actionView as SearchView
+            menu.findItem(R.id.search).setOnActionExpandListener(expandListener)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            if (menuItem.actionView is SearchView) {
+                val searchView = (menuItem.actionView as SearchView)
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        if (!binding.rvTopContent.isVisible) {
+                            newText?.let { viewModel.getSearchAirStatus(it) }
+                        }
+                        return true
+                    }
+
+                })
+            }
+            return true
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +113,18 @@ class PreviewFragment : Fragment() {
     }
 
     private fun initView() {
+        initToolbar()
+        initRecyclerView()
+    }
+
+    private fun initToolbar() {
         (requireActivity() as MainActivity?)?.supportActionBar?.setTitle(R.string.preview_page_title)
-        val decoration = DividerItemDecoration(requireContext(), VERTICAL)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(menuProvider)
+    }
+
+    private fun initRecyclerView() {
+        val decoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         binding.rvContent.apply {
             addItemDecoration(decoration)
             layoutManager =
@@ -117,6 +170,29 @@ class PreviewFragment : Fragment() {
                         }
                     }
                 }
+                viewModel.searchStatusResult.observe(viewLifecycleOwner) { list ->
+                    verticalAdapter.setData(list)
+                    when {
+                        list.isNotEmpty() -> {
+                            showEmptyView(false)
+                        }
+                        searchView.query.isNotEmpty() -> {
+                            showEmptyView(
+                                true,
+                                getString(
+                                    R.string.preview_page_search_empty_message,
+                                    searchView.query.toString()
+                                )
+                            )
+                        }
+                        searchView.query.isEmpty() -> {
+                            showEmptyView(
+                                true,
+                                getString(R.string.preview_page_search_message)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -125,7 +201,11 @@ class PreviewFragment : Fragment() {
         binding.pbLoading.isVisible = show
     }
 
-    private fun showEmptyView(show: Boolean) {
+    private fun showEmptyView(
+        show: Boolean,
+        message: String = getString(R.string.preview_page_empty)
+    ) {
         binding.tvEmpty.isVisible = show
+        binding.tvEmpty.text = message
     }
 }
