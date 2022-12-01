@@ -7,11 +7,11 @@ import com.example.ubiquitihomework.getViewModelScope
 import com.example.ubiquitihomework.misc.provider.DispatcherProvider
 import com.example.ubiquitihomework.model.api.ApiResult
 import com.example.ubiquitihomework.model.api.response.AirStatusRecord
-import com.example.ubiquitihomework.model.repository.ApiRepository
+import com.example.ubiquitihomework.model.repository.AirStatusRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PreviewViewModel(private val apiRepository: ApiRepository) : ViewModel() {
+class PreviewViewModel(private val apiRepository: AirStatusRepository) : ViewModel() {
     private val _airStatusResult = MutableLiveData<ApiResult<List<AirStatusRecord>>>()
     val airStatusResult: LiveData<ApiResult<List<AirStatusRecord>>> = _airStatusResult
 

@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.ubiquitihomework.model.api.ApiResult
 import com.example.ubiquitihomework.model.api.response.AirStatusRecord
 import com.example.ubiquitihomework.model.api.response.AirStatusResponse
-import com.example.ubiquitihomework.model.repository.ApiRepository
+import com.example.ubiquitihomework.model.repository.AirStatusRepositoryImpl
 import com.example.ubiquitihomework.rule.TestDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import org.junit.*
 internal class PreviewViewModelTest {
 
     private lateinit var viewModel: PreviewViewModel
-    private val mockApiRepository = mockk<ApiRepository>(relaxed = true)
+    private val mockApiRepository = mockk<AirStatusRepositoryImpl>(relaxed = true)
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

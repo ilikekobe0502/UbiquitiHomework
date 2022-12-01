@@ -10,7 +10,7 @@ data class AirStatusRecord(
     @SerializedName("county")
     val county: String,
     @SerializedName("pm2.5")
-    val pm2_5: String,
+    val pm25: String,
     @SerializedName("status")
     val status: String
 )

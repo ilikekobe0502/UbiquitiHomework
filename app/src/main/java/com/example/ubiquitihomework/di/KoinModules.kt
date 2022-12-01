@@ -1,7 +1,8 @@
 package com.example.ubiquitihomework.di
 
 import android.content.Context
-import com.example.ubiquitihomework.model.repository.ApiRepository
+import com.example.ubiquitihomework.model.repository.AirStatusRepository
+import com.example.ubiquitihomework.model.repository.AirStatusRepositoryImpl
 import com.example.ubiquitihomework.network.ApiModule
 import com.example.ubiquitihomework.network.AuthInterceptor
 import com.example.ubiquitihomework.ui.preview.PreviewViewModel
@@ -31,7 +32,7 @@ val networkModule = module {
     single { ApiModule.provideOkHttpClient(get()) }
     single { ApiModule.provideRetrofit(get()) }
     single { ApiModule.provideAirStatusApi(get()) }
-    factory { ApiRepository(get()) }
+    factory<AirStatusRepository> { AirStatusRepositoryImpl(get()) }
 }
 
 val viewModelModule = module {

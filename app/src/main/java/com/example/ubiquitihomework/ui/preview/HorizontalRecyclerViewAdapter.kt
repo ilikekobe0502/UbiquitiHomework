@@ -39,7 +39,7 @@ class HorizontalRecyclerViewAdapter :
             binding.tvIndex.text = item.siteId
             binding.tvCounty.text = item.county
             binding.tvSiteName.text = item.siteName
-            binding.tvPm.text = item.pm2_5
+            binding.tvPm.text = item.pm25
             binding.tvStatus.text = item.status
         }
     }

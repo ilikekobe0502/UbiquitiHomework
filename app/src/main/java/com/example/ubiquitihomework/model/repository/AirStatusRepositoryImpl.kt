@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
 
-class ApiRepository(private val apiService: ApiService) {
+class AirStatusRepositoryImpl(private val apiService: ApiService) :AirStatusRepository{
 
-    suspend fun getAirStatus(): Flow<AirStatusResponse?> {
+    override suspend fun getAirStatus(): Flow<AirStatusResponse?> {
         val queryMap: HashMap<String, String> = HashMap()
         queryMap["limit"] = "1000"
         queryMap["sort"] = "ImportDate desc"

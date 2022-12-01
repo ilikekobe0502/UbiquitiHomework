@@ -24,10 +24,6 @@ import org.koin.android.ext.android.inject
 
 
 class PreviewFragment : Fragment() {
-    companion object {
-        const val PM25_LIMIT: Int = 20
-    }
-
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
 
@@ -158,11 +154,17 @@ class PreviewFragment : Fragment() {
                                     showEmptyView(true)
                                 } else {
                                     showEmptyView(false)
-
+                                    var pm25Avg=0
+                                    list.forEach {
+                                        if (it.pm25 != "") {
+                                            pm25Avg += it.pm25.toInt()
+                                        }
+                                    }
+                                    pm25Avg /= list.size
                                     val horizontalList =
-                                        list.filter { (it.pm2_5.isNotEmpty() && it.pm2_5.toInt() <= PM25_LIMIT) }
+                                        list.filter { (it.pm25.isNotEmpty() && it.pm25.toInt() <= pm25Avg) }
                                     val verticalList =
-                                        list.filter { (it.pm2_5.isNotEmpty() && it.pm2_5.toInt() > PM25_LIMIT) }
+                                        list.filter { (it.pm25.isNotEmpty() && it.pm25.toInt() > pm25Avg) }
                                     horizontalAdapter.setData(horizontalList)
                                     verticalAdapter.setData(verticalList)
                                 }

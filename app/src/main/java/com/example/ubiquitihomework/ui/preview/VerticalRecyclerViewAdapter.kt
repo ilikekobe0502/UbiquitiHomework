@@ -20,7 +20,7 @@ class VerticalRecyclerViewAdapter(private val interactionListener: AdapterIntera
                 oldItem: AirStatusRecord,
                 newItem: AirStatusRecord
             ): Boolean {
-                return oldItem.pm2_5 == newItem.pm2_5
+                return oldItem.pm25 == newItem.pm25
             }
 
             override fun areContentsTheSame(
@@ -60,7 +60,7 @@ class VerticalRecyclerViewAdapter(private val interactionListener: AdapterIntera
             binding.tvIndex.text = item.siteId
             binding.tvCounty.text = item.county
             binding.tvSiteName.text = item.siteName
-            binding.tvPm.text = item.pm2_5
+            binding.tvPm.text = item.pm25
             if (item.status == STATUS_GREAT) {
                 binding.root.setOnClickListener(null)
                 binding.ivNext.visibility = View.GONE
