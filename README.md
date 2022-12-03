@@ -2,6 +2,7 @@
 
 ### Architectur
 - Kotlin
+- Koin
 - MVVM
 - Corutines
 - Flow
